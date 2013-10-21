@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}UCB Schedule of Classes: API{% endblock %}
+{% block content %}
+<h1>UCB Schedule of Classes: API</h1>
+<p>
+  This is an API for data obtained from scraping the UC Berkeley Schedule of Classes.
+  Currently, data from Spring 2014 is in the database. Examples:
+</p>
+<ul>
+    <li><code>/api/departments/35</code></li>
+    <li><code>/api/courses/615</code></li>
+    <li><code>/api/sections/1854</code></li>
+</ul>
+{% endblock %}

@@ -4,11 +4,34 @@
 <h1>UCB Schedule of Classes: API</h1>
 <p>
   This is an API for data obtained from scraping the UC Berkeley Schedule of Classes.
-  Currently, data from Spring 2014 is in the database. Examples:
+  Currently, data from Spring 2014 (starting from 2013-10-21) is in the database.
+  Examples:
 </p>
 <ul>
-    <li><code>/api/departments/35</code></li>
-    <li><code>/api/courses/615</code></li>
-    <li><code>/api/sections/1854</code></li>
+    <li>
+      <code>/api/departments?page=1</code>:
+      returns first page of departments
+    </li>
+    <li>
+      <code>/api/departments/35</code>:
+      returns department with <code>id=35</code> (COMPSCI)
+    </li>
+    <li>
+      <code>/api/departments/35/courses?page=1</code>:
+      returns first page of courses with department COMPSCI
+    </li>
+    <li>
+      <code>/api/courses/615</code>:
+      returns course with <code>id=615</code> (COMPSCI 189, Spring 2014)
+    </li>
+    <li>
+      <code>/api/sections/1854</code>:
+      returns section with <code>id=1854</code> (COMPSCI 189 LEC 001, Spring 2014)
+    </li>
+    <li>
+      <code>/api/sections/1854/instances</code>:
+      returns instances (where an instance is a section's data for a particular day)
+      of COMPSCI 189 LEC 001, Spring 2014
+    </li>
 </ul>
 {% endblock %}

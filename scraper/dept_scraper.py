@@ -1,8 +1,8 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from . import engine, Session
-from .models import Department, Course, Section 
+from . import Session
+from .models import Department 
 
 def scrape_departments(session):
     sburl = 'https://schedulebuilder.berkeley.edu/explore/'
@@ -22,7 +22,7 @@ def get_department(name, session):
     else:
         return None
 
-def run_dept_scraper():
+def run():
     session = Session()
     try:
         scrape_departments(session)

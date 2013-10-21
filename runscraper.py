@@ -1,4 +1,7 @@
-from scraper.dept_scraper import run_dept_scraper
+from scraper import dept_scraper, section_scraper
 
 # get department data from ScheduleBuilder
-run_dept_scraper()
+dept_scraper.run()
+
+# get section info
+section_scraper.run('Spring', 2014)

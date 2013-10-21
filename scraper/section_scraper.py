@@ -12,8 +12,7 @@ def scrape_sections(semester, year, session):
         search_dept(dept, semester, year, session)
 
 def search_dept(dept, semester, year, session):
-    sem_abbv = SEMESTERS[semester]
-    payload = { 'p_term': sem_abbv,
+    payload = { 'p_term': SEMESTERS[semester],
                 'p_deptname': '-- Choose a Department Name --',
                 'p_classif': '-- Choose a Course Classification --',
                 'p_presuf': '-- Choose a Course Prefix/Suffix --',
@@ -54,11 +53,12 @@ def analyze_section(section, dept, semester, year, session):
     inputs = section.find_all('input')
 
     # split 'STATISTICS 2 P 001 LEC' into ['STATISTICS', '2', 'P', '001', 'LEC']
-    section_id_parts = rows[0].find_all('td')[2].b.string.strip().split()
-    print section_id_parts
-    course_number = section_id_parts[-4].strip()
-    section_number = section_id_parts[-2].strip()
-    section_format = section_id_parts[-1].strip()
+    section_info = rows[0].find_all('td')[2].b.string.strip()
+    print section_info
+    section_info_parts = section_info.split()
+    course_number = section_info_parts[-4].strip()
+    section_number = section_info_parts[-2].strip()
+    section_format = section_info_parts[-1].strip()
 
     # usually in the format 'TuTh 5-6:30P, 155 DWINELLE'
     timeplace = rows[2].find_all('td')[1].tt.string.strip().split(', ')
@@ -74,7 +74,6 @@ def analyze_section(section, dept, semester, year, session):
     instructor = blank_if_none(rows[3].find_all('td')[1].tt)
     status = blank_if_none(rows[4].find_all('td')[1].tt)
     ccn = blank_if_none(rows[5].find_all('td')[1].tt)
-
     units = blank_if_none(rows[6].find_all('td')[1].tt)
 
     if semester != 'Summer':
@@ -101,16 +100,15 @@ def analyze_section(section, dept, semester, year, session):
         c = Course(department_id=dept.id, department=dept, number=course_number,
                    semester=semester, year=year)
         session.add(c)
-    s = Section(c, section_format, section_number, location, days, time, instructor,
-                status, ccn, units, session_dates, summer_fees, final_exam_group,
-                restrictions, note, enrolled, limit, waitlist)
+
+    s = Section(c.id, c, section_format, section_number, location, days, time,
+                instructor, status, ccn, units, session_dates, summer_fees,
+                final_exam_group, restrictions, note, enrolled, limit, waitlist)
     session.add(s)
 
 def get_course(dept, number, semester, year, session):
-    query = session.query(Course).filter_by(department=dept,
-                                            number=number,
-                                            semester=semester,
-                                            year=year)
+    query = session.query(Course).filter_by(department=dept, number=number,
+                                            semester=semester, year=year)
     if query.count() > 0:
         return query.first()
     else:

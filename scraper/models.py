@@ -1,5 +1,5 @@
-from datetime import datetime
-from sqlalchemy import Column, Sequence, ForeignKey, Integer, String, Text, DateTime
+from datetime import date
+from sqlalchemy import Column, Sequence, ForeignKey, Integer, String, Text, Date
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from . import engine
@@ -58,12 +58,13 @@ class Section(Base):
     enrolled = Column(Integer)
     limit = Column(Integer)
     waitlist = Column(Integer)
-    update_datetime = Column(DateTime)
+    update_date = Column(Date)
 
-    def __init__(self, course, section_format, section_number, location, days, time,
-                 instructor, status, ccn, units, session_dates, summer_fees,
-                 final_exam_group, restrictions, note, enrolled, limit, waitlist):
-        self.course_id = course.id
+    def __init__(self, course_id, course, section_format, section_number, location, days,
+                 time, instructor, status, ccn, units, session_dates, summer_fees,
+                 final_exam_group, restrictions, note, enrolled, limit, waitlist,
+                 update_date=date.today()):
+        self.course_id = course_id
         self.course = course
         self.section_format = section_format
         self.section_number = section_number
@@ -82,6 +83,6 @@ class Section(Base):
         self.enrolled = enrolled
         self.limit = limit
         self.waitlist = waitlist
-        self.update_datetime = datetime.now()
+        self.update_date = update_date
 
 Base.metadata.create_all(engine)

@@ -1,9 +1,10 @@
+from datetime import date
 import re
 import requests
 from bs4 import BeautifulSoup
 from tidylib import tidy_document
 from . import engine, Session
-from .models import Department, Course, Section 
+from .models import Department, Course, Section, SectionInstance 
 
 SEMESTERS = { 'Fall': 'FL', 'Spring': 'SP', 'Summer': 'SU' }
 
@@ -99,14 +100,38 @@ def analyze_section(section, dept, semester, year, session):
                    semester=semester, year=year)
         session.add(c)
 
-    s = Section(c.id, c, section_format, section_number, location, days, time,
-                instructor, status, ccn, units, session_dates, summer_fees,
-                final_exam_group, restrictions, note, enrolled, limit, waitlist)
-    session.add(s)
+    s = get_section(c, section_format, section_number, session)
+    if s is None:
+        s = Section(course_id=c.id, course=c, section_format=section_format,
+                    section_number=section_number)
+        session.add(s)
+
+    if check_instance(s, session) is None:
+        i = SectionInstance(s.id, s, location, days, time, instructor, status, ccn, units,
+                            session_dates, summer_fees, final_exam_group, restrictions,
+                            note, enrolled, limit, waitlist)
+        session.add(i)
 
 def get_course(dept, number, semester, year, session):
     query = session.query(Course).filter_by(department=dept, number=number,
                                             semester=semester, year=year)
+    if query.count() > 0:
+        return query.first()
+    else:
+        return None
+
+def get_section(course, section_format, section_number, session):
+    query = session.query(Section).filter_by(course=course,
+                                             section_number=section_number,
+                                             section_format=section_format)
+    if query.count() > 0:
+        return query.first()
+    else:
+        return None
+
+def check_instance(section, session):
+    query = session.query(SectionInstance).filter_by(section=section,
+                                                     update_date=date.today())
     if query.count() > 0:
         return query.first()
     else:

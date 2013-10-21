@@ -33,6 +33,7 @@ class Course(Base):
                                                     self.semester,
                                                     self.year)
 
+
 class Section(Base):
     __tablename__ = 'sections'
 
@@ -41,6 +42,13 @@ class Section(Base):
     course = relationship("Course", backref=backref('sections', order_by=id))
     section_format = Column(String(5))
     section_number = Column(String(5))
+
+class SectionInstance(Base):
+    __tablename__ = 'section_instances'
+
+    id = Column(Integer, Sequence('section_instance_id_seq'), primary_key=True)
+    section_id = Column(Integer, ForeignKey('sections.id'))
+    section = relationship("Section", backref=backref('instances', order_by=id))
     location = Column(String(50))
     days = Column(String(10))
     time = Column(String(10))
@@ -60,14 +68,11 @@ class Section(Base):
     waitlist = Column(Integer)
     update_date = Column(Date)
 
-    def __init__(self, course_id, course, section_format, section_number, location, days,
-                 time, instructor, status, ccn, units, session_dates, summer_fees,
-                 final_exam_group, restrictions, note, enrolled, limit, waitlist,
-                 update_date=date.today()):
-        self.course_id = course_id
-        self.course = course
-        self.section_format = section_format
-        self.section_number = section_number
+    def __init__(self, section_id, section, location, days, time, instructor, status,
+                 ccn, units, session_dates, summer_fees, final_exam_group, restrictions,
+                 note, enrolled, limit, waitlist, update_date=date.today()):
+        self.section_id = section_id
+        self.section = section
         self.location = location
         self.days = days
         self.time = time

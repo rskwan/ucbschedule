@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask.ext.restless import APIManager
 from sqlalchemy.orm import scoped_session
 from scraper import Session
-from scraper.models import Department, Course, Section
+from scraper.models import Department, Course, Section, SectionInstance
 
 app = Flask(__name__)
 
@@ -12,6 +12,7 @@ manager = APIManager(app, session=session)
 manager.create_api(Department)
 manager.create_api(Course)
 manager.create_api(Section)
+manager.create_api(SectionInstance)
 
 @app.route('/')
 def index():

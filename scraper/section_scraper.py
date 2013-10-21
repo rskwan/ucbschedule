@@ -24,19 +24,17 @@ def search_dept(dept, semester, year, session):
     # get the total rows so we can keep searching
     soup = BeautifulSoup(txt)
     tables = soup.find_all('table')
-    a = tables[0].find_all('tr')[1].find_all('td')[1].a
-    if a:
-        # use regex to get the total rows out of the 'see next results' link
-        match = re.search('p_total_rows=\d+', str(a['href']))
-        if match:
-            totalrows = int(match.group().split('=')[1])
-            # each page displays 100 rows (sections); index starts with 1, not 0
-            for i in range(1, ((totalrows/100)+1)):
-                payload['p_start_row'] = str(100*i + 1)
-                r = requests.post('http://osoc.berkeley.edu/OSOC/osoc',
-                                  params=payload)
-                txt, err = tidy_document(r.text)
-                analyze_html(txt, semester, year, session)
+    is_total_rows = lambda tag: tag.has_attr('name') and tag['name'] == 'p_total_rows'
+    inp = tables[0].find_all(is_total_rows)
+    if inp:
+        totalrows = int(inp[0]['value'])
+        # each page displays 100 rows (sections); index starts with 1, not 0
+        for i in range(1, ((totalrows/100)+1)):
+            payload['p_start_row'] = str(100*i + 1)
+            r = requests.post('http://osoc.berkeley.edu/OSOC/osoc',
+                              params=payload)
+            txt, err = tidy_document(r.text)
+            analyze_html(txt, dept, semester, year, session)
 
 def analyze_html(txt, dept, semester, year, session):
     soup = BeautifulSoup(txt)

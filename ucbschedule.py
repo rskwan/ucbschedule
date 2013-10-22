@@ -3,6 +3,7 @@ from flask.ext.restless import APIManager
 from sqlalchemy.orm import scoped_session
 from scraper import Session
 from scraper.models import Department, Course, Section, SectionInstance
+from scraper.stats import most_full_filters
 
 app = Flask(__name__)
 
@@ -17,6 +18,11 @@ manager.create_api(SectionInstance)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/mostfull')
+def mostfull():
+    full = most_full_filters(session)
+    return render_template('mostfull.html', full=full)
 
 @app.errorhandler(404)
 def page_not_found(e):

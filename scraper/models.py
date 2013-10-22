@@ -43,6 +43,14 @@ class Section(Base):
     section_format = Column(String(5))
     section_number = Column(String(5))
 
+    def __str__(self):
+        return "{0} {1} {2} {3} ({4} {5})".format(self.course.department.abbreviation,
+                                                  self.course.number,
+                                                  self.section_format,
+                                                  self.section_number,
+                                                  self.course.semester,
+                                                  self.course.year)
+
 class SectionInstance(Base):
     __tablename__ = 'section_instances'
 

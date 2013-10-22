@@ -1,7 +1,11 @@
-import argparse
+import argparse, os, shutil
 from scraper import dept_scraper, section_scraper
 
 VALID_SEMESTERS = [('Spring', 2014)]
+
+def backup():
+    if os.path.isfile('schedule.db'):
+        shutil.copy2('schedule.db', 'schedule-backup.db')
 
 parser = argparse.ArgumentParser(description="Scrape the UCB Schedule of Classes.")
 parser.add_argument('type', type=str, help="type of scraping (department or section).")
@@ -14,6 +18,7 @@ print "type: {0}, semester: {1}, year: {2}".format(args.type,
                                                    args.year)
 
 if args.type == 'department':
+    backup()
     dept_scraper.run()
 
 if args.type == 'section':
@@ -25,5 +30,6 @@ if args.type == 'section':
         raise ValueError("Invalid year.")
     if (semester, year) not in VALID_SEMESTERS:
         raise ValueError("Invalid semester/year.")
+    backup()
     section_scraper.run(semester, year)
 

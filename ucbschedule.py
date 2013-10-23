@@ -1,3 +1,4 @@
+from datetime import date
 from flask import Flask, render_template
 from flask.ext.restless import APIManager
 from sqlalchemy.orm import scoped_session
@@ -19,9 +20,15 @@ manager.create_api(SectionInstance)
 def index():
     return render_template('index.html')
 
-@app.route('/mostfull')
+@app.route('/mostfull/')
 def mostfull():
     full = most_full_filters(session, fmt='LEC')
+    return render_template('mostfull.html', full=full)
+
+@app.route('/mostfull/<int:year>-<int:month>-<int:day>')
+def mostfull_day(year, month, day):
+    full = most_full_filters(session, fmt='LEC',
+                             day=date(year, month, day))
     return render_template('mostfull.html', full=full)
 
 @app.errorhandler(404)

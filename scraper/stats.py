@@ -42,3 +42,38 @@ def print_most_full(full):
             print "%s: %.2f percent full" % pair
     else:
         print "No sections given."
+
+def biggest(n, instances):
+    """Returns the N (int) biggest (i.e. with highest seat limit) sections
+    out of INSTANCES."""
+    pairs = []
+    for instance in instances:
+        pairs.append((str(instance.section), instance.limit))
+    pairs.sort(key=lambda x: x[1])
+    pairs.reverse()
+    return pairs[:n]
+
+def biggest_filters(session, day=date.today(), dept=None, n=25):
+    instances = session.query(SectionInstance).\
+                        filter(SectionInstance.update_date == day).\
+                        filter(SectionInstance.limit != 0)
+    if dept:
+        dept_course_ids = session.query(Course.id).\
+                                  filter(Course.department_id == dept.id).\
+                                  subquery()
+        dept_section_ids = session.query(Section.id).\
+                                   filter(Section.course_id.in_(dept_course_ids)).\
+                                   subquery()
+        instances = instances.filter(SectionInstance.section_id.in_(dept_section_ids))
+    if instances.count() > 0:
+        return biggest(n, instances.all())
+    else:
+        return None
+
+def print_biggest(big):
+    if big:
+        print "Biggest classes:"
+        for pair in big:
+            print "{0}: {1} seats".format(pair[0], pair[1])
+    else:
+        print "No sections given."

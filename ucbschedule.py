@@ -21,7 +21,7 @@ def index():
 
 @app.route('/mostfull')
 def mostfull():
-    full = most_full_filters(session)
+    full = most_full_filters(session, fmt='LEC')
     return render_template('mostfull.html', full=full)
 
 @app.errorhandler(404)

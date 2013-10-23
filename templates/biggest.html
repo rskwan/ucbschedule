@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block title %}UCB Schedule of Classes: Classes with Highest Seat Limit{% endblock %}
 {% block content %}
-<h1>Classes with Highest Seat Limit</h1>
+<h1>
+  Classes with Highest Seat Limit
+  <small>
+    <a href="{{ url_for('index') }}">Back?</a>
+  </small>
+</h1>
 {% if not big %}
 <p>Sorry, but we couldn't get any data for the day specified. Try again later.</p>
 {% else %}

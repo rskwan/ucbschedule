@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from . import Session
 from .models import Department, Course, Section, SectionInstance
 
@@ -8,7 +8,7 @@ def most_full(n, instances):
     for instance in instances:
         fullness = (100.0 * (instance.enrolled + instance.waitlist)) \
                    / instance.limit
-        pairs.append((str(instance.section), fullness))
+        pairs.append((instance, fullness))
     pairs.sort(key=lambda x: x[1])
     pairs.reverse()
     return pairs[:n]
@@ -48,7 +48,7 @@ def biggest(n, instances):
     out of INSTANCES."""
     pairs = []
     for instance in instances:
-        pairs.append((str(instance.section), instance.limit))
+        pairs.append((instance, instance.limit))
     pairs.sort(key=lambda x: x[1])
     pairs.reverse()
     return pairs[:n]

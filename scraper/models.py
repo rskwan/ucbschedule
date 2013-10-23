@@ -98,4 +98,7 @@ class SectionInstance(Base):
         self.waitlist = waitlist
         self.update_date = update_date
 
+    def __str__(self):
+        return str(self.section) + " ({0})".format(self.update_date)
+
 Base.metadata.create_all(engine)

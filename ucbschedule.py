@@ -4,7 +4,7 @@ from flask.ext.restless import APIManager
 from sqlalchemy.orm import scoped_session
 from scraper import Session
 from scraper.models import Department, Course, Section, SectionInstance
-from scraper.stats import most_full_filters
+from scraper.stats import most_full_filters, biggest_filters
 
 app = Flask(__name__)
 
@@ -30,6 +30,11 @@ def mostfull_day(year, month, day):
     full = most_full_filters(session, fmt='LEC',
                              day=date(year, month, day))
     return render_template('mostfull.html', full=full)
+
+@app.route('/biggest/')
+def biggest():
+    big = biggest_filters(session)
+    return render_template('biggest.html', big=big)
 
 @app.errorhandler(404)
 def page_not_found(e):

@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal, ROUND_DOWN
 from flask import Flask, render_template
 from flask.ext.restless import APIManager
 from sqlalchemy.orm import scoped_session
@@ -23,18 +24,32 @@ def index():
 @app.route('/mostfull/')
 def mostfull():
     full = most_full_filters(session, fmt='LEC')
-    return render_template('mostfull.html', full=full)
-
-@app.route('/mostfull/<int:year>-<int:month>-<int:day>')
-def mostfull_day(year, month, day):
-    full = most_full_filters(session, fmt='LEC',
-                             day=date(year, month, day))
-    return render_template('mostfull.html', full=full)
+    ranked = []
+    for i in range(len(full)):
+        pair = full[i]
+        percent = Decimal(pair[1]).quantize(Decimal('.01'),
+                                            rounding=ROUND_DOWN)
+        if i > 0 and percent == ranked[i - 1][2]:
+            rank = ranked[i - 1][0]
+        else:
+            rank = i + 1
+        triplet = (rank, pair[0], percent)
+        ranked.append(triplet)
+    return render_template('mostfull.html', ranked=ranked)
 
 @app.route('/biggest/')
 def biggest():
     big = biggest_filters(session)
-    return render_template('biggest.html', big=big)
+    ranked = []
+    for i in range(len(big)):
+        pair = big[i]
+        if i > 0 and pair[1] == ranked[i - 1][2]:
+            rank = ranked[i - 1][0]
+        else:
+            rank = i + 1
+        triplet = (rank, pair[0], pair[1])
+        ranked.append(triplet)
+    return render_template('biggest.html', ranked=ranked)
 
 @app.errorhandler(404)
 def page_not_found(e):

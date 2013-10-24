@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from sqlalchemy.sql import func
 from . import Session
 from .models import Department, Course, Section, SectionInstance
 
@@ -77,3 +78,25 @@ def print_biggest(big):
             print "{0}: {1} seats".format(pair[0], pair[1])
     else:
         print "No sections given."
+
+def popular_rooms(session, day=date.today(), fmt=None, n=25):
+    query = session.query(SectionInstance.location, func.count('*')).\
+                    filter(SectionInstance.location != '').\
+                    group_by(SectionInstance.location)
+    if fmt:
+        fmt_section_ids = session.query(Section.id).\
+                                  filter(Section.section_format == fmt).\
+                                  subquery()
+        query = query.filter(SectionInstance.section_id.in_(fmt_section_ids))
+    pairs = query.all()
+    pairs.sort(key=lambda p: p[1])
+    pairs.reverse()
+    return pairs[:n]
+
+def print_popular_rooms(rooms):
+    if rooms:
+        print "Most popular rooms:"
+        for pair in rooms:
+            print "{0}: {1} sections".format(pair[0], pair[1])
+    else:
+        print "No rooms given."

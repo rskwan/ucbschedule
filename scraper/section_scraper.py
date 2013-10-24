@@ -111,6 +111,7 @@ def analyze_section(section, dept, semester, year, session):
                             session_dates, summer_fees, final_exam_group, restrictions,
                             note, enrolled, limit, waitlist)
         session.add(i)
+    print "done"
 
 def get_course(dept, number, semester, year, session):
     query = session.query(Course).filter_by(department=dept, number=number,

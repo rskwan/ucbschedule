@@ -7,24 +7,28 @@
     <a href="{{ url_for('index') }}">Back?</a>
   </small>
 </h1>
-{% if not full %}
+{% if not ranked %}
 <p>Sorry, but we couldn't get any data for the day specified. Try again later.</p>
 {% else %}
-<table class="table">
-  <thead>
-    <tr>
-      <th>Section</th>
-      <th>Percent Enrolled/Waitlisted</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for pair in full %}
-    <tr>
-      <td>{{ pair[0] }}</td>
-      <td>{{ pair[1] }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Section</th>
+        <th>Percent Enrolled or Waitlisted</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for triplet in ranked %}
+      <tr>
+        <td>{{ triplet[0] }}</td>
+        <td>{{ triplet[1] }}</td>
+        <td>{{ triplet[2] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endif %}
 {% endblock %}

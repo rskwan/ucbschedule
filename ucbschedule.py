@@ -8,7 +8,6 @@ from schedule.models import Department, Course, Section, SectionInstance
 from schedule.stats import most_full_filters, biggest_filters
 
 app = Flask(__name__)
-app.debug = True
 
 # initialize API
 session = scoped_session(Session)
@@ -35,7 +34,6 @@ def mostfull():
             d = date.today()
         try:
             if request.form['dept'] != 'all':
-                print request.form['dept']
                 dept = session.query(Department).\
                                filter(Department.abbreviation == request.form['dept']).\
                                first()
@@ -66,7 +64,6 @@ def biggest():
     if request.method == 'POST':
         try:
             if request.form['dept'] != 'all':
-                print request.form['dept']
                 dept = session.query(Department).\
                                filter(Department.abbreviation == request.form['dept']).\
                                first()

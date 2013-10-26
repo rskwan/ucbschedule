@@ -50,8 +50,8 @@ def mostfull():
     ranked = []
     for i in range(len(full)):
         pair = full[i]
-        percent = Decimal(pair[1]).quantize(Decimal('.01'),
-                                            rounding=ROUND_DOWN)
+        percent = Decimal(str(pair[1])).quantize(Decimal('.01'),
+                                                 rounding=ROUND_DOWN)
         if i > 0 and percent == ranked[i - 1][2]:
             rank = ranked[i - 1][0]
         else:

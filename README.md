@@ -16,7 +16,7 @@ Use `runscraper.py` to run the scrapers. There are two:
 * Department scraper (`dept_scraper.py`): Scrapes department names and
   abbreviations from ScheduleBuilder.
 * Section scraper (`section_scraper.py`): Scrapes all info from the
-  [UCB Schedule of Classes](schedule.berkeley.edu) for today.
+  [UCB Schedule of Classes](http://schedule.berkeley.edu) for today.
 
 ## Web Application
 

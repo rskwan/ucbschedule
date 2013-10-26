@@ -1,5 +1,5 @@
 import argparse, os, shutil
-from scraper import dept_scraper, section_scraper
+from schedule import dept_scraper, section_scraper
 
 VALID_SEMESTERS = [('Spring', 2014)]
 

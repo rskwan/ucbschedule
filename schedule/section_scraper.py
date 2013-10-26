@@ -114,25 +114,22 @@ def analyze_section(section, dept, semester, year, session):
     print "done"
 
 def get_course(dept, number, semester, year, session):
-    query = session.query(Course).filter_by(department=dept, number=number,
-                                            semester=semester, year=year)
-    if query.count() > 0:
-        return query.first()
-    else:
-        return None
+    return first_or_none(session.query(Course).\
+                                 filter_by(department=dept, number=number,
+                                           semester=semester, year=year))
 
 def get_section(course, section_format, section_number, session):
-    query = session.query(Section).filter_by(course=course,
-                                             section_number=section_number,
-                                             section_format=section_format)
-    if query.count() > 0:
-        return query.first()
-    else:
-        return None
+    return first_or_none(session.query(Section).\
+                                 filter_by(course=course,
+                                           section_number=section_number,
+                                           section_format=section_format))
 
 def check_instance(section, session):
-    query = session.query(SectionInstance).filter_by(section=section,
-                                                     update_date=date.today())
+    return first_or_none(session.query(SectionInstance).\
+                                 filter_by(section=section,
+                                           update_date=date.today()))
+
+def first_or_none(query):
     if query.count() > 0:
         return query.first()
     else:

@@ -3,9 +3,9 @@ from decimal import Decimal, ROUND_DOWN
 from flask import Flask, request, render_template
 from flask.ext.restless import APIManager
 from sqlalchemy.orm import scoped_session
-from scraper import Session
-from scraper.models import Department, Course, Section, SectionInstance
-from scraper.stats import most_full_filters, biggest_filters
+from schedule import Session
+from schedule.models import Department, Course, Section, SectionInstance
+from schedule.stats import most_full_filters, biggest_filters
 
 app = Flask(__name__)
 app.debug = True

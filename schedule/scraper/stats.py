@@ -1,6 +1,5 @@
 from datetime import date, datetime
 from sqlalchemy.sql import func
-from . import Session
 from .models import Department, Course, Section, SectionInstance
 
 def most_full(n, instances):

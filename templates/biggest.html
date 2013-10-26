@@ -7,6 +7,27 @@
     <a href="{{ url_for('index') }}">Back?</a>
   </small>
 </h1>
+<hr/>
+{% if depts %}
+<form class="form-horizontal" role="form"
+      action="{{ url_for('biggest') }}" method="POST">
+  <div class="form-group">
+    <label class="col-lg-2 control-label" for="dept">Department</label>
+    <div class="col-lg-8">
+      <select name="dept" class="form-control">
+      <option value="all">All</option>
+      {% for dept in depts %}
+      <option value="{{ dept[0] }}">{{ dept[1] }}</option>
+      {% endfor %}
+      </select>
+    </div>
+    <div class="col-lg-1">
+      <button type="submit" class="btn btn-default btn-block">Go!</button>
+    </div>
+  </div>
+</form>
+<hr/>
+{% endif %}
 {% if not ranked %}
 <p>Sorry, but we couldn't get any data for the day specified. Try again later.</p>
 {% else %}

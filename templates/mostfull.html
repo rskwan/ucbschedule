@@ -7,6 +7,50 @@
     <a href="{{ url_for('index') }}">Back?</a>
   </small>
 </h1>
+<hr/>
+<form class="form-horizontal" role="form"
+      action="{{ url_for('mostfull') }}" method="POST">
+  <div class="form-group">
+    <label class="col-lg-2 control-label">Date</label> 
+    <label class="sr-only" for="year">Year</label>
+    <div class="col-lg-4">
+      <input type="number" min="2013" step="1"
+             class="form-control" name="year"
+             placeholder="Year (YYYY)">
+    </div>
+    <label class="sr-only" for="month">Month</label>
+    <div class="col-lg-3">
+      <input type="number" min="1" max="12" step="1"
+             class="form-control" name="month"
+             placeholder="Month (MM)">
+    </div>
+    <label class="sr-only" for="day">Day</label>
+    <div class="col-lg-3">
+      <input type="number" min="1" max="31" step="1"
+             class="form-control" name="day"
+             placeholder="Day (DD)">
+    </div>
+  </div>
+  {% if depts %}
+  <div class="form-group">
+    <label class="col-lg-2 control-label" for="dept">Department</label> 
+    <div class="col-lg-10">
+      <select name="dept" class="form-control">
+        <option value="all">All</option>
+        {% for dept in depts %}
+        <option value="{{ dept[0] }}">{{ dept[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  {% endif %}
+  <div class="form-group">
+    <div class="col-lg-offset-4 col-lg-4">
+      <button type="submit" class="btn btn-default btn-block">Go!</button>
+    </div>
+  </div>
+</form>
+<hr/>
 {% if not ranked %}
 <p>Sorry, but we couldn't get any data for the day specified. Try again later.</p>
 {% else %}

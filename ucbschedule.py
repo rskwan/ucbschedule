@@ -1,6 +1,6 @@
 from datetime import date
 from decimal import Decimal, ROUND_DOWN
-from flask import Flask, render_template
+from flask import Flask, request, render_template
 from flask.ext.restless import APIManager
 from sqlalchemy.orm import scoped_session
 from scraper import Session
@@ -8,6 +8,7 @@ from scraper.models import Department, Course, Section, SectionInstance
 from scraper.stats import most_full_filters, biggest_filters
 
 app = Flask(__name__)
+app.debug = True
 
 # initialize API
 session = scoped_session(Session)
@@ -21,9 +22,31 @@ manager.create_api(SectionInstance)
 def index():
     return render_template('index.html')
 
-@app.route('/mostfull/')
+@app.route('/mostfull/', methods=['GET', 'POST'])
 def mostfull():
-    full = most_full_filters(session, fmt='LEC')
+    error = None
+    if request.method == 'POST':
+        try:
+            year = int(request.form['year'])
+            month = int(request.form['month'])
+            day = int(request.form['day'])
+            d = date(year, month, day)
+        except:
+            d = date.today()
+        try:
+            if request.form['dept'] != 'all':
+                print request.form['dept']
+                dept = session.query(Department).\
+                               filter(Department.abbreviation == request.form['dept']).\
+                               first()
+            else:
+                dept = None
+        except:
+            dept = None
+        full = most_full_filters(session, day=d, dept=dept, fmt='LEC')
+    else:
+        full = most_full_filters(session, fmt='LEC')
+    depts = session.query(Department.abbreviation, Department.name).all()
     ranked = []
     for i in range(len(full)):
         pair = full[i]
@@ -35,11 +58,26 @@ def mostfull():
             rank = i + 1
         triplet = (rank, pair[0], percent)
         ranked.append(triplet)
-    return render_template('mostfull.html', ranked=ranked)
+    return render_template('mostfull.html', ranked=ranked, depts=depts)
 
-@app.route('/biggest/')
+@app.route('/biggest/', methods=['GET', 'POST'])
 def biggest():
-    big = biggest_filters(session)
+    error = None
+    if request.method == 'POST':
+        try:
+            if request.form['dept'] != 'all':
+                print request.form['dept']
+                dept = session.query(Department).\
+                               filter(Department.abbreviation == request.form['dept']).\
+                               first()
+            else:
+                dept = None
+        except:
+            dept = None
+        big = biggest_filters(session, dept=dept)
+    else:
+        big = biggest_filters(session)
+    depts = session.query(Department.abbreviation, Department.name).all()
     ranked = []
     for i in range(len(big)):
         pair = big[i]
@@ -49,7 +87,7 @@ def biggest():
             rank = i + 1
         triplet = (rank, pair[0], pair[1])
         ranked.append(triplet)
-    return render_template('biggest.html', ranked=ranked)
+    return render_template('biggest.html', ranked=ranked, depts=depts)
 
 @app.errorhandler(404)
 def page_not_found(e):

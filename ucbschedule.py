@@ -8,6 +8,7 @@ from schedule.models import Department, Course, Section, SectionInstance
 from schedule.stats import most_full_filters, biggest_filters
 
 app = Flask(__name__)
+app.debug = True
 
 # initialize API
 session = scoped_session(Session)
@@ -45,17 +46,20 @@ def mostfull():
     else:
         full = most_full_filters(session, fmt='LEC')
     depts = session.query(Department.abbreviation, Department.name).all()
-    ranked = []
-    for i in range(len(full)):
-        pair = full[i]
-        percent = Decimal(str(pair[1])).quantize(Decimal('.01'),
-                                                 rounding=ROUND_DOWN)
-        if i > 0 and percent == ranked[i - 1][2]:
-            rank = ranked[i - 1][0]
-        else:
-            rank = i + 1
-        triplet = (rank, pair[0], percent)
-        ranked.append(triplet)
+    if full:
+        ranked = []
+        for i in range(len(full)):
+            pair = full[i]
+            percent = Decimal(str(pair[1])).quantize(Decimal('.01'),
+                                                     rounding=ROUND_DOWN)
+            if i > 0 and percent == ranked[i - 1][2]:
+                rank = ranked[i - 1][0]
+            else:
+                rank = i + 1
+            triplet = (rank, pair[0], percent)
+            ranked.append(triplet)
+    else:
+        ranked = None
     return render_template('mostfull.html', ranked=ranked, depts=depts)
 
 @app.route('/biggest/', methods=['GET', 'POST'])

@@ -8,7 +8,6 @@ from schedule.models import Department, Course, Section, SectionInstance
 from schedule.stats import most_full_filters, biggest_filters
 
 app = Flask(__name__)
-app.debug = True
 
 # initialize API
 session = scoped_session(Session)

@@ -7,7 +7,7 @@
     <h2>API</h2>
     <p>
       We provide an API for data obtained from scraping the UC Berkeley Schedule of Classes.
-      Currently, data from Spring 2014 (starting from 2013-10-21) is in the database.
+      Currently, data from Fall 2014 (starting from 2014-04-06) is in the database.
       Examples:
     </p>
     <ul>
@@ -16,25 +16,25 @@
           returns first page of departments
         </li>
         <li>
-          <code>/api/departments/35</code>:
-          returns department with <code>id=35</code> (COMPSCI)
+          <code>/api/departments/36</code>:
+          returns department with <code>id=36</code> (COMPSCI)
         </li>
         <li>
-          <code>/api/departments/35/courses?page=1</code>:
+          <code>/api/departments/36/courses?page=1</code>:
           returns first page of courses with department COMPSCI
         </li>
         <li>
-          <code>/api/courses/615</code>:
-          returns course with <code>id=615</code> (COMPSCI 189, Spring 2014)
+          <code>/api/courses/610</code>:
+          returns course with <code>id=615</code> (COMPSCI 176, Fall 2014)
         </li>
         <li>
-          <code>/api/sections/1854</code>:
-          returns section with <code>id=1854</code> (COMPSCI 189 LEC 001, Spring 2014)
+          <code>/api/sections/2001</code>:
+          returns section with <code>id=2001</code> (COMPSCI 176 LEC 001, Fall 2014)
         </li>
         <li>
           <code>/api/sections/1854/instances</code>:
           returns instances (where an instance is a section's data for a particular day)
-          of COMPSCI 189 LEC 001, Spring 2014
+          of COMPSCI 176 LEC 001, Fall 2014
         </li>
     </ul>
   </div>

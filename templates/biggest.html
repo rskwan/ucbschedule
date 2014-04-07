@@ -37,6 +37,7 @@
       <tr>
         <th>Rank</th>
         <th>Section</th>
+        <th>Location</th>
         <th>Seat Limit</th>
       </tr>
     </thead>
@@ -45,6 +46,7 @@
       <tr>
         <td>{{ triplet[0] }}</td>
         <td>{{ triplet[1] }}</td>
+        <td>{{ triplet[1].location }}</td>
         <td>{{ triplet[2] }}</td>
       </tr>
       {% endfor %}

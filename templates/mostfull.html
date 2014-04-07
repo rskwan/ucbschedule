@@ -61,6 +61,9 @@
         <th>Rank</th>
         <th>Section</th>
         <th>Percent Enrolled or Waitlisted</th>
+        <th>Enrolled</th>
+        <th>Waitlisted</th>
+        <th>Seat Limit</th>
       </tr>
     </thead>
     <tbody>
@@ -69,6 +72,9 @@
         <td>{{ triplet[0] }}</td>
         <td>{{ triplet[1] }}</td>
         <td>{{ triplet[2] }}</td>
+        <td>{{ triplet[1].enrolled }}</td>
+        <td>{{ triplet[1].waitlist }}</td>
+        <td>{{ triplet[1].limit }}</td>
       </tr>
       {% endfor %}
     </tbody>

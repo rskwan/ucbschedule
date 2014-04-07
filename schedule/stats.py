@@ -11,9 +11,16 @@ def most_full(n, instances):
         pairs.append((instance, fullness))
     pairs.sort(key=lambda x: x[1])
     pairs.reverse()
-    return pairs[:n]
+    results = []
+    cutoff = pairs[:n][-1][1]
+    for pair in pairs:
+        if pair[1] >= cutoff:
+            results.append(pair)
+        else:
+            break
+    return results
 
-def most_full_filters(session, day=date.today(), dept=None, fmt=None, n=25):
+def most_full_filters(session, day=date.today(), dept=None, fmt=None, n=30):
     instances = session.query(SectionInstance).\
                         filter(SectionInstance.update_date == day).\
                         filter(SectionInstance.limit != 0)
@@ -51,9 +58,16 @@ def biggest(n, instances):
         pairs.append((instance, instance.limit))
     pairs.sort(key=lambda x: x[1])
     pairs.reverse()
-    return pairs[:n]
+    results = []
+    cutoff = pairs[:n][-1][1]
+    for pair in pairs:
+        if pair[1] >= cutoff:
+            results.append(pair)
+        else:
+            break
+    return results
 
-def biggest_filters(session, day=date.today(), dept=None, n=25):
+def biggest_filters(session, day=date.today(), dept=None, n=30):
     instances = session.query(SectionInstance).\
                         filter(SectionInstance.update_date == day).\
                         filter(SectionInstance.limit != 0)
@@ -90,7 +104,14 @@ def popular_rooms(session, day=date.today(), fmt=None, n=25):
     pairs = query.all()
     pairs.sort(key=lambda p: p[1])
     pairs.reverse()
-    return pairs[:n]
+    results = []
+    cutoff = pairs[:n][-1][1]
+    for pair in pairs:
+        if pair[1] >= cutoff:
+            results.append(pair[0])
+        else:
+            break
+    return results
 
 def print_popular_rooms(rooms):
     if rooms:

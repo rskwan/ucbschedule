@@ -1,7 +1,7 @@
 import argparse, os, shutil
 from schedule import dept_scraper, section_scraper
 
-VALID_SEMESTERS = [('Spring', 2014)]
+VALID_SEMESTERS = [('Spring', 2014), ('Fall', 2014)]
 
 def backup():
     if os.path.isfile('schedule.db'):
